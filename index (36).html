@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mainstay — Done-for-you automation engines</title>
+<meta name="description" content="Done-for-you automation engines that plug the one stage quietly leaking your growth — lead capture, follow-up, onboarding or reporting. You own the system.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23161D22%22%2F%3E%3Cpath%20d%3D%22M7%2023%20V10%20L16%2019%20L25%2010%20V23%22%20fill%3D%22none%22%20stroke%3D%22%23F4EFE6%22%20stroke-width%3D%223.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3Ccircle%20cx%3D%2225.5%22%20cy%3D%2223.5%22%20r%3D%222.4%22%20fill%3D%22%23E0883B%22%2F%3E%3C%2Fsvg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --charcoal-900:#161D22; --charcoal-800:#202A30; --charcoal-700:#2B373E;
+  --charcoal-600:#3A4953; --charcoal-500:#566570; --charcoal-400:#8593A0;
+  --paper:#F4EFE6; --paper-100:#FBF8F2; --paper-300:#E8E0D2; --paper-muted:#6C7178;
+  --amber:#E0883B; --amber-soft:#EBA866; --amber-press:#C9722B; --amber-wash:rgba(224,136,59,0.14);
+  --ring:rgba(224,136,59,0.55);
+  --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --container:1120px;
+  --ease:cubic-bezier(0.2,0,0.1,1);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--charcoal-800); color:var(--paper);
+  font-family:var(--font-sans); font-weight:400; line-height:1.55;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+a{color:inherit;}
+.wrap{max-width:var(--container); margin:0 auto; padding-left:24px; padding-right:24px;}
+.eyebrow{
+  font-weight:700; font-size:12px; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--amber); margin:0;
+}
+.mono{font-family:var(--font-mono);}
+
+/* ---- Wordmark ---- */
+.wordmark{
+  display:inline-flex; align-items:center; gap:9px; font-weight:800;
+  letter-spacing:0.04em; text-transform:uppercase; text-decoration:none;
+  color:var(--paper); font-size:18px; white-space:nowrap;
+}
+.wordmark .dot{width:8px; height:8px; border-radius:50%; background:var(--amber); flex:none;}
+
+/* ---- Header ---- */
+header.site{
+  position:sticky; top:0; z-index:50;
+  background:rgba(32,42,48,0.86); backdrop-filter:blur(10px);
+  border-bottom:1px solid transparent;
+  transition:border-color 220ms var(--ease), background 220ms var(--ease);
+}
+header.site .bar{
+  display:flex; align-items:center; justify-content:space-between;
+  height:72px; transition:height 220ms var(--ease);
+}
+header.site.condensed{border-bottom-color:var(--charcoal-700); background:rgba(22,29,34,0.9);}
+header.site.condensed .bar{height:56px;}
+.head-links{display:flex; align-items:center; gap:8px;}
+.icon-link{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:38px; height:38px; border-radius:6px; color:var(--charcoal-400);
+  text-decoration:none; transition:color 140ms var(--ease), background 140ms var(--ease);
+}
+.icon-link:hover{color:var(--paper); background:rgba(255,255,255,0.05);}
+.icon-link svg{width:19px; height:19px;}
+.head-links .book{display:none; margin-left:8px;}
+
+/* ---- Buttons ---- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--font-sans); font-weight:600; text-decoration:none;
+  border-radius:6px; border:1px solid transparent; cursor:pointer;
+  transition:background 160ms var(--ease), transform 120ms var(--ease), border-color 160ms var(--ease), box-shadow 160ms var(--ease);
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--amber); color:var(--charcoal-900); border-color:var(--amber);}
+.btn-primary:hover{background:var(--amber-soft); border-color:var(--amber-soft); box-shadow:0 8px 24px -12px rgba(224,136,59,0.6);}
+.btn-lg{font-size:17px; padding:15px 26px;}
+.btn-sm{font-size:14px; padding:9px 16px;}
+.btn:focus-visible{outline:none; box-shadow:0 0 0 3px var(--ring); border-color:var(--amber);}
+
+/* ---- Hero ---- */
+.hero{padding:80px 0 64px;}
+.hero h1{
+  margin:20px 0 0; font-weight:900; font-size:clamp(40px,8.4vw,76px);
+  line-height:1.02; letter-spacing:-0.024em; max-width:14ch; text-wrap:balance;
+}
+.hero h1 .amber{color:var(--amber);}
+.hero .sub{
+  margin:24px 0 0; font-size:clamp(17px,2.4vw,20px); line-height:1.55;
+  color:var(--charcoal-400); max-width:46ch;
+}
+.hero .cta-row{margin-top:34px; display:flex; flex-wrap:wrap; gap:16px; align-items:center;}
+.hero .reassure{margin:0; font-size:13px; color:var(--charcoal-500);}
+
+/* ---- Section scaffolding ---- */
+section{padding:72px 0;}
+.sec-head{display:flex; flex-direction:column; gap:14px; margin-bottom:40px;}
+.sec-head h2{
+  margin:0; font-weight:900; font-size:clamp(30px,5vw,46px);
+  letter-spacing:-0.022em; line-height:1.06; max-width:18ch; text-wrap:balance;
+}
+
+/* ---- Paper section ---- */
+.paper{background:var(--paper); color:var(--charcoal-800);}
+.paper .eyebrow{color:var(--amber-press);}
+.paper .sec-head h2{color:var(--charcoal-800);}
+
+/* ---- How it works ---- */
+.steps{display:grid; gap:1px; background:var(--paper-300); border:1px solid var(--paper-300); border-radius:10px; overflow:hidden;}
+.step{background:var(--paper-100); padding:32px; display:flex; flex-direction:column; gap:12px;}
+.step .num{
+  font-family:var(--font-mono); font-size:13px; color:var(--amber-press); font-weight:500;
+  letter-spacing:0.04em;
+}
+.step h3{margin:0; font-weight:800; font-size:21px; letter-spacing:-0.01em; color:var(--charcoal-800);}
+.step p{margin:0; font-size:15px; line-height:1.55; color:var(--paper-muted);}
+
+/* ---- Offer / engines ---- */
+.engines{display:grid; gap:16px;}
+.engine{
+  background:var(--charcoal-700); border:1px solid var(--charcoal-600); border-radius:10px;
+  padding:24px 26px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  transition:border-color 160ms var(--ease), transform 160ms var(--ease);
+}
+.engine:hover{border-color:var(--charcoal-500); transform:translateY(-2px);}
+.engine .left{display:flex; align-items:baseline; gap:16px; min-width:0;}
+.engine .idx{font-family:var(--font-mono); font-size:13px; color:var(--charcoal-500); flex:none;}
+.engine .meta{min-width:0;}
+.engine h3{margin:0; font-weight:700; font-size:19px; letter-spacing:-0.01em; color:var(--paper);}
+.engine p{margin:4px 0 0; font-size:14px; line-height:1.5; color:var(--charcoal-400);}
+.engine .price{
+  font-family:var(--font-mono); font-size:18px; font-weight:500; color:var(--amber);
+  white-space:nowrap; flex:none;
+}
+.offer-note{margin:28px 0 0; font-size:14px; color:var(--charcoal-500); max-width:60ch;}
+
+/* ---- Trust row ---- */
+.trust{display:grid; gap:16px;}
+.trust .item{
+  background:var(--charcoal-700); border:1px solid var(--charcoal-600); border-radius:10px;
+  padding:28px; display:flex; flex-direction:column; gap:10px;
+}
+.trust .item .ico{width:24px; height:24px; color:var(--amber);}
+.trust .item h3{margin:0; font-weight:700; font-size:17px; color:var(--paper); letter-spacing:-0.01em;}
+.trust .item p{margin:0; font-size:14px; line-height:1.55; color:var(--charcoal-400);}
+
+/* ---- Final CTA band ---- */
+.band{background:var(--charcoal-900); border-top:1px solid var(--charcoal-700); border-bottom:1px solid var(--charcoal-700);}
+.band .inner{padding:80px 0; display:flex; flex-direction:column; gap:22px; align-items:flex-start;}
+.band h2{
+  margin:0; font-weight:900; font-size:clamp(30px,5.4vw,52px);
+  letter-spacing:-0.022em; line-height:1.02; max-width:16ch; text-wrap:balance;
+}
+.band h2 .amber{color:var(--amber);}
+.band p{margin:0; font-size:17px; line-height:1.55; color:var(--charcoal-400); max-width:46ch;}
+
+/* ---- Footer ---- */
+footer.site{padding:40px 0;}
+footer.site .inner{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;}
+footer.site .links{display:flex; gap:18px; flex-wrap:wrap; align-items:center; font-family:var(--font-mono); font-size:13px;}
+footer.site .links a.text{color:var(--charcoal-500); text-decoration:none; transition:color 120ms var(--ease);}
+footer.site .links a.text:hover{color:var(--amber);}
+footer.site .links .icon-link{color:var(--charcoal-500);}
+footer.site .links .icon-link:hover{color:var(--amber); background:rgba(255,255,255,0.04);}
+
+/* ---- Sticky mobile CTA ---- */
+.mobile-cta{
+  position:fixed; left:16px; right:16px; bottom:16px; z-index:60;
+  display:none; opacity:0; transform:translateY(16px);
+  transition:opacity 260ms var(--ease), transform 260ms var(--ease);
+  box-shadow:0 12px 32px -10px rgba(0,0,0,0.5);
+}
+.mobile-cta.show{opacity:1; transform:translateY(0);}
+.mobile-cta .btn{width:100%;}
+
+/* ---- Scroll reveal ---- */
+.reveal{opacity:0; transform:translateY(22px); transition:opacity 600ms var(--ease), transform 600ms var(--ease);}
+.reveal.in{opacity:1; transform:none;}
+.stagger > *{opacity:0; transform:translateY(22px); transition:opacity 560ms var(--ease), transform 560ms var(--ease);}
+.stagger.in > *{opacity:1; transform:none;}
+
+@media (min-width:680px){
+  .wrap{padding-left:48px; padding-right:48px;}
+  .head-links .book{display:inline-flex;}
+  .steps{grid-template-columns:repeat(3,1fr);}
+  .trust{grid-template-columns:repeat(3,1fr);}
+  .hero{padding:112px 0 88px;}
+  .mobile-cta{display:none !important;}
+}
+@media (min-width:900px){
+  .engines{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:679px){
+  .mobile-cta{display:block;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{transition:none !important; animation:none !important;}
+  .reveal,.stagger > *{opacity:1 !important; transform:none !important;}
+  .mobile-cta{opacity:1; transform:none;}
+}
+</style>
+</head>
+<body>
+
+<header class="site" id="header">
+  <div class="wrap bar">
+    <a class="wordmark" href="#top" aria-label="Mainstay home"><span class="dot"></span>Mainstay</a>
+    <nav class="head-links">
+      <a class="icon-link" href="https://linkedin.com/company/mainstay-system" target="_blank" rel="noopener" aria-label="Mainstay on LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="icon-link" href="https://instagram.com/mainstay.system" target="_blank" rel="noopener" aria-label="Mainstay on Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a class="btn btn-primary btn-sm book" href="https://cal.com/mainstay" target="_blank" rel="noopener">Book a teardown</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Done-for-you automation engines</p>
+      <h1 class="reveal">Fix the one stage quietly <span class="amber">leaking</span> your growth.</h1>
+      <p class="sub reveal">Done-for-you automation engines that plug the leak — lead capture, follow-up, onboarding or reporting.</p>
+      <div class="cta-row reveal">
+        <a class="btn btn-primary btn-lg" href="https://cal.com/mainstay" target="_blank" rel="noopener">Book a free 10-min teardown</a>
+        <p class="reassure mono">No pitch · no retainer · you keep the map</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="paper">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2>Three steps. One leak closed.</h2>
+      </div>
+      <div class="steps stagger">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>We find the leak</h3>
+          <p>A short teardown of your pipeline. We pinpoint the one handoff, follow-up or report quietly losing you revenue.</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>We build the engine</h3>
+          <p>A focused, done-for-you automation that closes that exact leak — wired to your real tools, not a template.</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>You own it</h3>
+          <p>The system is yours — keys, logic and documentation. No retainer, no lock-in, no rented platform.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFER -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="eyebrow">The engines</p>
+        <h2>Pick the engine for your leak. Fixed scope, fixed price.</h2>
+      </div>
+      <div class="engines stagger">
+        <div class="engine">
+          <div class="left">
+            <span class="idx">01</span>
+            <div class="meta"><h3>Attract</h3><p>Capture and qualify inbound before it goes cold.</p></div>
+          </div>
+          <span class="price">€2,000</span>
+        </div>
+        <div class="engine">
+          <div class="left">
+            <span class="idx">02</span>
+            <div class="meta"><h3>Book</h3><p>Turn interest into booked calls automatically.</p></div>
+          </div>
+          <span class="price">€2,000</span>
+        </div>
+        <div class="engine">
+          <div class="left">
+            <span class="idx">03</span>
+            <div class="meta"><h3>Close</h3><p>Sequenced follow-up that fires on real signals.</p></div>
+          </div>
+          <span class="price">€2,800</span>
+        </div>
+        <div class="engine">
+          <div class="left">
+            <span class="idx">04</span>
+            <div class="meta"><h3>Onboard</h3><p>Get new clients live without the manual scramble.</p></div>
+          </div>
+          <span class="price">€2,500</span>
+        </div>
+        <div class="engine">
+          <div class="left">
+            <span class="idx">05</span>
+            <div class="meta"><h3>Second-Brain</h3><p>Your context, searchable and wired into the work.</p></div>
+          </div>
+          <span class="price">€2,500</span>
+        </div>
+        <div class="engine">
+          <div class="left">
+            <span class="idx">06</span>
+            <div class="meta"><h3>Auto-Report</h3><p>The number you can trust on Monday, built once.</p></div>
+          </div>
+          <span class="price">€3,000</span>
+        </div>
+      </div>
+      <p class="offer-note mono reveal">One engine, one leak. Not sure which? The teardown tells you where to start.</p>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section>
+    <div class="wrap">
+      <div class="trust stagger">
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <h3>Owned, not rented</h3>
+          <p>You keep the keys, the logic and the documentation. The engine runs on your stack — not a platform we control.</p>
+        </div>
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+          <h3>14-day guarantee</h3>
+          <p>If the engine doesn't close the leak it was built to close, we make it right inside 14 days — or you don't pay.</p>
+        </div>
+        <div class="item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/><circle cx="12" cy="12" r="10"/></svg>
+          <h3>No lock-in</h3>
+          <p>Fixed scope, fixed price, one engine at a time. No retainers, no seats, no surprise renewals.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA BAND -->
+  <section class="band">
+    <div class="wrap inner reveal">
+      <p class="eyebrow">Start here</p>
+      <h2>Find your <span class="amber">leaking</span> stage in 10 minutes.</h2>
+      <p>Book a free teardown. We map where your growth is leaking and tell you the one engine worth building first.</p>
+      <a class="btn btn-primary btn-lg" href="https://cal.com/mainstay" target="_blank" rel="noopener">Book a free 10-min teardown</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap inner">
+    <a class="wordmark" href="#top" aria-label="Mainstay home"><span class="dot"></span>Mainstay</a>
+    <div class="links">
+      <a class="text" href="https://cal.com/mainstay" target="_blank" rel="noopener">Book a teardown</a>
+      <a class="icon-link" href="https://linkedin.com/company/mainstay-system" target="_blank" rel="noopener" aria-label="Mainstay on LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="icon-link" href="https://instagram.com/mainstay.system" target="_blank" rel="noopener" aria-label="Mainstay on Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky mobile CTA -->
+<div class="mobile-cta" id="mobileCta">
+  <a class="btn btn-primary btn-lg" href="https://cal.com/mainstay" target="_blank" rel="noopener">Book a free 10-min teardown</a>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var header = document.getElementById('header');
+  var mobileCta = document.getElementById('mobileCta');
+
+  // Condensing sticky header
+  function onScroll(){
+    if (window.scrollY > 24) header.classList.add('condensed');
+    else header.classList.remove('condensed');
+    // Mobile CTA appears after leaving hero
+    if (window.scrollY > 420) mobileCta.classList.add('show');
+    else mobileCta.classList.remove('show');
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  if (reduce) return;
+
+  // Gentle hero entrance
+  var heroItems = document.querySelectorAll('.hero .reveal');
+  heroItems.forEach(function(el, i){
+    el.style.transitionDelay = (i * 90) + 'ms';
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('in'); }); });
+  });
+
+  // Scroll reveals
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      if (el.classList.contains('stagger')){
+        Array.prototype.forEach.call(el.children, function(child, i){
+          child.style.transitionDelay = (i * 70) + 'ms';
+        });
+      }
+      el.classList.add('in');
+      io.unobserve(el);
+    });
+  }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
+
+  document.querySelectorAll('.reveal:not(.hero .reveal), .stagger').forEach(function(el){
+    if (el.closest('.hero')) return;
+    io.observe(el);
+  });
+})();
+</script>
+
+</body>
+</html>
